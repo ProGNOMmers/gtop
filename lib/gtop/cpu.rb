@@ -1,6 +1,6 @@
 require 'gtop'
 
-module Gtop
+module GTop
   class Cpu < FFI::Struct
     layout :flags,         :guint64,
            :total,         :guint64,

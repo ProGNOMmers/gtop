@@ -1,22 +1,22 @@
 require 'spec_helper'
 
-describe Gtop do
+describe GTop do
 
   describe '.cpu' do
     it 'works' do
-      expect{ Gtop.cpu(Gtop::Cpu.new) }.to_not raise_exception
+      expect{ described_class.cpu(described_class::Cpu.new) }.to_not raise_exception
     end
   end
 
   describe '.memory' do
     it 'works' do
-      expect{ Gtop.memory(Gtop::Memory.new) }.to_not raise_exception
+      expect{ described_class.memory(described_class::Memory.new) }.to_not raise_exception
     end
   end
 
   describe '.swap' do
     it 'works' do
-      expect{ Gtop.swap(Gtop::Swap.new) }.to_not raise_exception
+      expect{ described_class.swap(described_class::Swap.new) }.to_not raise_exception
     end
   end
 

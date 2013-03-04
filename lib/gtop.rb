@@ -1,6 +1,6 @@
 require 'ffi'
 
-module Gtop
+module GTop
   extend FFI::Library
   ffi_lib 'libgtop-2.0'
 

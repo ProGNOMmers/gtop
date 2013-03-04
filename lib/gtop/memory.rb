@@ -1,6 +1,6 @@
 require 'gtop'
 
-module Gtop
+module GTop
   class Memory < FFI::Struct
     layout :total,  :guint64,
            :used,   :guint64,
