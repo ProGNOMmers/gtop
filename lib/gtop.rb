@@ -6,17 +6,23 @@ module Gtop
 
   typedef :uint64, :guint64
 
-  attach_function :cpu, :glibtop_get_cpu, [:pointer], :void
+  attach_function :cpu,    :glibtop_get_cpu, [:pointer], :void
+  attach_function :memory, :glibtop_get_mem, [:pointer], :void
 end
 
 require 'gtop/cpu'
+require 'gtop/memory'
 
 def reload!
   load __FILE__
 end
 
 def test
-  a = Gtop::Cpu.new
-  Gtop.cpu(a)
+  # a = Gtop::Cpu.new
+  # Gtop.cpu(a)
+  # Hash[ a.members.map { |m| [ m, a[m] ] } ]
+
+  a = Gtop::Memory.new
+  Gtop.memory(a)
   Hash[ a.members.map { |m| [ m, a[m] ] } ]
 end
