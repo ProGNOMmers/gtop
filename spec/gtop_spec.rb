@@ -14,4 +14,10 @@ describe Gtop do
     end
   end
 
+  describe '.swap' do
+    it 'works' do
+      expect{ Gtop.swap(Gtop::Swap.new) }.to_not raise_exception
+    end
+  end
+
 end
