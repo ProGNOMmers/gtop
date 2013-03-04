@@ -20,4 +20,17 @@ describe GTop do
     end
   end
 
+  describe '.uptime' do
+    it 'works' do
+      expect{ described_class.uptime(described_class::Uptime.new) }.to_not raise_exception
+    end
+  end
+
+
+  describe '.load_average' do
+    it 'works' do
+      expect{ described_class.load_average(described_class::LoadAverage.new) }.to_not raise_exception
+    end
+  end
+
 end

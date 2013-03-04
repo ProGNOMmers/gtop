@@ -6,14 +6,18 @@ module GTop
 
   typedef :uint64, :guint64
 
-  attach_function :cpu,    :glibtop_get_cpu,  [:pointer], :void
-  attach_function :memory, :glibtop_get_mem,  [:pointer], :void
-  attach_function :swap,   :glibtop_get_swap, [:pointer], :void
+  attach_function :cpu,          :glibtop_get_cpu,     [:pointer], :void
+  attach_function :memory,       :glibtop_get_mem,     [:pointer], :void
+  attach_function :swap,         :glibtop_get_swap,    [:pointer], :void
+  attach_function :uptime,       :glibtop_get_uptime,  [:pointer], :void
+  attach_function :load_average, :glibtop_get_loadavg, [:pointer], :void
 end
 
 require 'gtop/cpu'
 require 'gtop/memory'
 require 'gtop/swap'
+require 'gtop/uptime'
+require 'gtop/load_average'
 
 def reload!
   load __FILE__
