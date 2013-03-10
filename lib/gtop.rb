@@ -29,18 +29,19 @@ module GTop
   EXCLUDE_SYSTEM    = 0x2000
   EXCLUDE_NOTTY     = 0x4000
 
-  attach_function :cpu,            :glibtop_get_cpu,         [:pointer],                   :void
-  attach_function :memory,         :glibtop_get_mem,         [:pointer],                   :void
-  attach_function :swap,           :glibtop_get_swap,        [:pointer],                   :void
-  attach_function :uptime,         :glibtop_get_uptime,      [:pointer],                   :void
-  attach_function :load_average,   :glibtop_get_loadavg,     [:pointer],                   :void
-  attach_function :process_list,   :glibtop_get_proclist,    [:pointer, :gint64, :gint64], :uintptr_t
-  attach_function :process_state,  :glibtop_get_proc_state,  [:pointer, :pid_t],           :void
-  attach_function :process_uid,    :glibtop_get_proc_uid,    [:pointer, :pid_t],           :void
-  attach_function :process_memory, :glibtop_get_proc_mem,    [:pointer, :pid_t],           :void
-  attach_function :process_time,   :glibtop_get_proc_time,   [:pointer, :pid_t],           :void
-  attach_function :process_signal, :glibtop_get_proc_signal, [:pointer, :pid_t],           :void
-  attach_function :process_kernel, :glibtop_get_proc_kernel, [:pointer, :pid_t],           :void
+  attach_function :cpu,             :glibtop_get_cpu,          [:pointer],                   :void
+  attach_function :memory,          :glibtop_get_mem,          [:pointer],                   :void
+  attach_function :swap,            :glibtop_get_swap,         [:pointer],                   :void
+  attach_function :uptime,          :glibtop_get_uptime,       [:pointer],                   :void
+  attach_function :load_average,    :glibtop_get_loadavg,      [:pointer],                   :void
+  attach_function :process_list,    :glibtop_get_proclist,     [:pointer, :gint64, :gint64], :uintptr_t
+  attach_function :process_state,   :glibtop_get_proc_state,   [:pointer, :pid_t],           :void
+  attach_function :process_uid,     :glibtop_get_proc_uid,     [:pointer, :pid_t],           :void
+  attach_function :process_memory,  :glibtop_get_proc_mem,     [:pointer, :pid_t],           :void
+  attach_function :process_time,    :glibtop_get_proc_time,    [:pointer, :pid_t],           :void
+  attach_function :process_signal,  :glibtop_get_proc_signal,  [:pointer, :pid_t],           :void
+  attach_function :process_kernel,  :glibtop_get_proc_kernel,  [:pointer, :pid_t],           :void
+  attach_function :process_segment, :glibtop_get_proc_segment, [:pointer, :pid_t],           :void
 end
 
 require 'gtop/cpu'
@@ -56,6 +57,7 @@ require 'gtop/process_memory'
 require 'gtop/process_time'
 require 'gtop/process_signal'
 require 'gtop/process_kernel'
+require 'gtop/process_segment'
 
 def reload!
   load __FILE__
