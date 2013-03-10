@@ -4,7 +4,7 @@ module GTop
   extend FFI::Library
   ffi_lib 'libgtop-2.0'
 
-  require 'gtop/glib'
+  # require 'gtop/glib'
 
   typedef :int64,  :gint64
   typedef :uint64, :guint64
@@ -24,12 +24,13 @@ module GTop
   EXCLUDE_SYSTEM    = 0x2000
   EXCLUDE_NOTTY     = 0x4000
 
-  attach_function :cpu,          :glibtop_get_cpu,      [:pointer], :void
-  attach_function :memory,       :glibtop_get_mem,      [:pointer], :void
-  attach_function :swap,         :glibtop_get_swap,     [:pointer], :void
-  attach_function :uptime,       :glibtop_get_uptime,   [:pointer], :void
-  attach_function :load_average, :glibtop_get_loadavg,  [:pointer], :void
-  attach_function :process_list, :glibtop_get_proclist, [:pointer, :gint64, :gint64], :uintptr_t
+  attach_function :cpu,           :glibtop_get_cpu,        [:pointer],                   :void
+  attach_function :memory,        :glibtop_get_mem,        [:pointer],                   :void
+  attach_function :swap,          :glibtop_get_swap,       [:pointer],                   :void
+  attach_function :uptime,        :glibtop_get_uptime,     [:pointer],                   :void
+  attach_function :load_average,  :glibtop_get_loadavg,    [:pointer],                   :void
+  attach_function :process_list,  :glibtop_get_proclist,   [:pointer, :gint64, :gint64], :uintptr_t
+  attach_function :process_state, :glibtop_get_proc_state, [:pointer, :pid_t],           :void
 end
 
 require 'gtop/cpu'
@@ -37,7 +38,8 @@ require 'gtop/memory'
 require 'gtop/swap'
 require 'gtop/uptime'
 require 'gtop/load_average'
-require 'gtop/process_list'
+# require 'gtop/process_list'
+require 'gtop/process_state'
 
 def reload!
   load __FILE__
@@ -52,7 +54,7 @@ def test
   # Gtop.memory(a)
   # Hash[ a.members.map { |m| [ m, a[m] ] } ]
 
-  a = Gtop::ProcessList.new
-  Gtop.process_list(a)
-  Hash[ a.members.map { |m| [ m, a[m] ] } ]
+  # a = Gtop::ProcessList.new
+  # Gtop.process_list(a)
+  # Hash[ a.members.map { |m| [ m, a[m] ] } ]
 end

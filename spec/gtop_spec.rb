@@ -26,10 +26,15 @@ describe GTop do
     end
   end
 
-
   describe '.load_average' do
     it 'works' do
       expect{ described_class.load_average(described_class::LoadAverage.new) }.to_not raise_exception
+    end
+  end
+
+  describe '.process_state' do
+    it 'works' do
+      expect{ described_class.process_state(described_class::ProcessState.new, Process.pid) }.to_not raise_exception
     end
   end
 
