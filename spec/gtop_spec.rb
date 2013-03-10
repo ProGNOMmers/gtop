@@ -38,4 +38,10 @@ describe GTop do
     end
   end
 
+  describe '.process_uid' do
+    it 'works' do
+      expect{ described_class.process_uid(described_class::ProcessUid.new, Process.pid) }.to_not raise_exception
+    end
+  end
+
 end

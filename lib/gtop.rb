@@ -4,6 +4,7 @@ module GTop
   extend FFI::Library
   ffi_lib 'libgtop-2.0'
 
+  # FIXME it doesn't work; temporarly disabled
   # require 'gtop/glib'
 
   typedef :int64,  :gint64
@@ -12,6 +13,7 @@ module GTop
 
   # Constants
   #   glibtop_get_proclist which (2nd) argument
+  #   TODO why are they here??? move them!
   KERN_PROC_ALL     = 0
   KERN_PROC_PID     = 1
   KERN_PROC_PGRP    = 2
@@ -31,6 +33,7 @@ module GTop
   attach_function :load_average,  :glibtop_get_loadavg,    [:pointer],                   :void
   attach_function :process_list,  :glibtop_get_proclist,   [:pointer, :gint64, :gint64], :uintptr_t
   attach_function :process_state, :glibtop_get_proc_state, [:pointer, :pid_t],           :void
+  attach_function :process_uid,   :glibtop_get_proc_uid,   [:pointer, :pid_t],           :void
 end
 
 require 'gtop/cpu'
@@ -38,8 +41,10 @@ require 'gtop/memory'
 require 'gtop/swap'
 require 'gtop/uptime'
 require 'gtop/load_average'
+# FIXME it doesn't work; temporarly disabled
 # require 'gtop/process_list'
 require 'gtop/process_state'
+require 'gtop/process_uid'
 
 def reload!
   load __FILE__
@@ -48,10 +53,6 @@ end
 def test
   # a = Gtop::Cpu.new
   # Gtop.cpu(a)
-  # Hash[ a.members.map { |m| [ m, a[m] ] } ]
-
-  # a = Gtop::Memory.new
-  # Gtop.memory(a)
   # Hash[ a.members.map { |m| [ m, a[m] ] } ]
 
   # a = Gtop::ProcessList.new
