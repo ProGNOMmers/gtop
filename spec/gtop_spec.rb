@@ -44,4 +44,9 @@ describe GTop do
     end
   end
 
+  describe '.process_memory' do
+    it 'works' do
+      expect{ described_class.process_memory(described_class::ProcessMemory.new, Process.pid) }.to_not raise_exception
+    end
+  end
 end
