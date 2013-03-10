@@ -40,6 +40,7 @@ module GTop
   attach_function :process_memory, :glibtop_get_proc_mem,    [:pointer, :pid_t],           :void
   attach_function :process_time,   :glibtop_get_proc_time,   [:pointer, :pid_t],           :void
   attach_function :process_signal, :glibtop_get_proc_signal, [:pointer, :pid_t],           :void
+  attach_function :process_kernel, :glibtop_get_proc_kernel, [:pointer, :pid_t],           :void
 end
 
 require 'gtop/cpu'
@@ -54,6 +55,7 @@ require 'gtop/process_uid'
 require 'gtop/process_memory'
 require 'gtop/process_time'
 require 'gtop/process_signal'
+require 'gtop/process_kernel'
 
 def reload!
   load __FILE__
