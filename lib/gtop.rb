@@ -12,8 +12,11 @@ module GTop
   typedef :ulong,  :uintptr_t
 
   # Constants
-  #   glibtop_get_proclist which (2nd) argument
-  #   TODO why are they here??? move them!
+  #   Max CPU number
+  NCPU = 32
+  #   Max groups for user
+  MAX_GROUPS = 64
+  #   glibtop_get_proclist 2nd argument (which)
   KERN_PROC_ALL     = 0
   KERN_PROC_PID     = 1
   KERN_PROC_PGRP    = 2
@@ -35,6 +38,7 @@ module GTop
   attach_function :process_state,  :glibtop_get_proc_state, [:pointer, :pid_t],           :void
   attach_function :process_uid,    :glibtop_get_proc_uid,   [:pointer, :pid_t],           :void
   attach_function :process_memory, :glibtop_get_proc_mem,   [:pointer, :pid_t],           :void
+  attach_function :process_time,   :glibtop_get_proc_time,  [:pointer, :pid_t],           :void
 end
 
 require 'gtop/cpu'
@@ -47,6 +51,7 @@ require 'gtop/load_average'
 require 'gtop/process_state'
 require 'gtop/process_uid'
 require 'gtop/process_memory'
+require 'gtop/process_time'
 
 def reload!
   load __FILE__

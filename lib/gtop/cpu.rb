@@ -2,8 +2,6 @@ require 'gtop'
 
 module GTop
   class Cpu < FFI::Struct
-    NCPU = 32
-
     layout :flags,         :guint64,
            :total,         :guint64,
            :user,          :guint64,

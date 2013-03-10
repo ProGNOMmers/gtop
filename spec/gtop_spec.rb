@@ -49,4 +49,10 @@ describe GTop do
       expect{ described_class.process_memory(described_class::ProcessMemory.new, Process.pid) }.to_not raise_exception
     end
   end
+
+  describe '.process_time' do
+    it 'works' do
+      expect{ described_class.process_time(described_class::ProcessTime.new, Process.pid) }.to_not raise_exception
+    end
+  end
 end

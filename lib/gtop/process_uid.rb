@@ -2,8 +2,6 @@ require 'gtop'
 
 module GTop
   class ProcessUid < FFI::Struct
-    MAX_GROUPS = 64
-
     layout :flags,     :guint64,
            :uid,       :int,
            :euid,      :int,
