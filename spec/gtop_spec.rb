@@ -55,4 +55,10 @@ describe GTop do
       expect{ described_class.process_time(described_class::ProcessTime.new, Process.pid) }.to_not raise_exception
     end
   end
+
+  describe '.process_signal' do
+    it 'works' do
+      expect{ described_class.process_signal(described_class::ProcessSignal.new, Process.pid) }.to_not raise_exception
+    end
+  end
 end
