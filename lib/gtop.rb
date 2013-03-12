@@ -4,8 +4,6 @@ module GTop
   extend FFI::Library
   ffi_lib 'libgtop-2.0'
 
-  require 'gtop/glib'
-
   typedef :int64,  :gint64
   typedef :uint64, :guint64
   typedef :ulong,  :uintptr_t
@@ -41,10 +39,11 @@ module GTop
   attach_function :process_signal,  :glibtop_get_proc_signal,  [:pointer, :pid_t],           :void
   attach_function :process_kernel,  :glibtop_get_proc_kernel,  [:pointer, :pid_t],           :void
   attach_function :process_segment, :glibtop_get_proc_segment, [:pointer, :pid_t],           :void
-  # FIXME like process_state
-  # attach_function :process_args,    :glibtop_get_proc_args,    [:pointer, :pid_t, :uint],    :pointer
+  attach_function :process_args,    :glibtop_get_proc_args,    [:pointer, :pid_t, :uint],    :pointer
+  attach_function :process_argv,    :glibtop_get_proc_argv,    [:pointer, :pid_t, :uint],    :pointer
 end
 
+require 'gtop/glib'
 require 'gtop/cpu'
 require 'gtop/memory'
 require 'gtop/swap'
@@ -58,5 +57,4 @@ require 'gtop/process_time'
 require 'gtop/process_signal'
 require 'gtop/process_kernel'
 require 'gtop/process_segment'
-# FIXME like process_state
-# require 'gtop/process_args'
+require 'gtop/process_args'

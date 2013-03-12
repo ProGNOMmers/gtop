@@ -7,6 +7,7 @@ module GTop
 
     typedef :pointer, :gpointer
 
-    attach_function :g_free, [:gpointer], :void
+    attach_function :g_free,     [:gpointer], :void
+    attach_function :g_strfreev, [:gpointer], :void
   end
 end

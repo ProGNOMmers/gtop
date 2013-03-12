@@ -32,6 +32,24 @@ describe GTop do
     end
   end
 
+  describe '.process_list' do
+    it 'works' do
+      expect {
+        s = GTop::ProcessList.new
+        addr = GTop.process_list(s, GTop::KERN_PROC_ALL, 0)
+        ptr = FFI::Pointer.new(:pointer, addr)
+        ap = FFI::AutoPointer.new ptr,
+                            GTop::GLib.method(:g_free)
+        if ap.null?
+          nil
+        else
+          ap.read_array_of_uint(s[:number])
+        end
+        Hash[ s.members.map { |m| [ m, s[m] ] } ]
+      }.to_not raise_exception
+    end
+  end
+
   describe '.process_state' do
     it 'works' do
       expect{ described_class.process_state(described_class::ProcessState.new, Process.pid) }.to_not raise_exception
@@ -74,23 +92,38 @@ describe GTop do
     end
   end
 
-  describe '.process_list', focus: true do
+  describe '.process_args' do
     it 'works' do
       expect {
-        s = GTop::ProcessList.new
-        addr = GTop.process_list(s, GTop::KERN_PROC_ALL, 0)
-        
+        s = GTop::ProcessArgs.new
+        addr = GTop.process_args(s, Process.pid, 0)
         ptr = FFI::Pointer.new(:pointer, addr)
-
         ap = FFI::AutoPointer.new ptr,
                             GTop::GLib.method(:g_free)
         if ap.null?
-          'ap is null'
+          nil
         else
-          p ap.read_array_of_uint(s[:number])
+          ap.read_string(s[:size]).force_encoding('UTF-8')
         end
+        Hash[ s.members.map { |m| [ m, s[m] ] } ]
+      }.to_not raise_exception
+    end
+  end
 
-        p Hash[ s.members.map { |m| [ m, s[m] ] } ]
+  describe '.process_argv', focus€: true do
+    it 'works' do
+      expect {
+        s = GTop::ProcessArgs.new
+        addr = GTop.process_argv(s, Process.pid, 0)
+        ptr = FFI::Pointer.new(:pointer, addr)
+        ap = FFI::AutoPointer.new ptr,
+                            GTop::GLib.method(:g_strfreev)
+        if ap.null?
+          nil
+        else
+          ap.get_array_of_string(0).map{ |v| v.force_encoding('UTF-8') }
+        end
+        Hash[ s.members.map { |m| [ m, s[m] ] } ]
       }.to_not raise_exception
     end
   end
