@@ -3,7 +3,7 @@ require 'gtop'
 module GTop
   module GLib
     extend FFI::Library
-    ffi_lib 'libglib2.0'
+    ffi_lib 'libglib-2.0'
 
     typedef :pointer, :gpointer
 

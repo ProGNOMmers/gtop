@@ -73,4 +73,26 @@ describe GTop do
       expect{ described_class.process_segment(described_class::ProcessSegment.new, Process.pid) }.to_not raise_exception
     end
   end
+
+  describe '.process_list', focus: true do
+    it 'works' do
+      expect {
+        s = GTop::ProcessList.new
+        addr = GTop.process_list(s, GTop::KERN_PROC_ALL, 0)
+        
+        ptr = FFI::Pointer.new(:pointer, addr)
+
+        ap = FFI::AutoPointer.new ptr,
+                            GTop::GLib.method(:g_free)
+        if ap.null?
+          'ap is null'
+        else
+          p ap.read_array_of_uint(s[:number])
+        end
+
+        p Hash[ s.members.map { |m| [ m, s[m] ] } ]
+      }.to_not raise_exception
+    end
+  end
+
 end
