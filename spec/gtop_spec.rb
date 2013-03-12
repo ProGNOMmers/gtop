@@ -35,17 +35,16 @@ describe GTop do
   describe '.process_list' do
     it 'works' do
       expect {
-        s = GTop::ProcessList.new
-        addr = GTop.process_list(s, GTop::KERN_PROC_ALL, 0)
+        s = described_class::ProcessList.new
+        addr = described_class.process_list(s, described_class::KERN_PROC_ALL, 0)
         ptr = FFI::Pointer.new(:pointer, addr)
-        ap = FFI::AutoPointer.new ptr,
-                            GTop::GLib.method(:g_free)
+        ap = FFI::AutoPointer.new ptr, described_class::GLib.method(:g_free)
         if ap.null?
           nil
         else
           ap.read_array_of_uint(s[:number])
         end
-        Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        # Hash[ s.members.map { |m| [ m, s[m] ] } ]
       }.to_not raise_exception
     end
   end
@@ -95,35 +94,45 @@ describe GTop do
   describe '.process_args' do
     it 'works' do
       expect {
-        s = GTop::ProcessArgs.new
-        addr = GTop.process_args(s, Process.pid, 0)
+        s = described_class::ProcessArgs.new
+        addr = described_class.process_args(s, Process.pid, 0)
         ptr = FFI::Pointer.new(:pointer, addr)
-        ap = FFI::AutoPointer.new ptr,
-                            GTop::GLib.method(:g_free)
+        ap = FFI::AutoPointer.new ptr, described_class::GLib.method(:g_free)
         if ap.null?
           nil
         else
           ap.read_string(s[:size]).force_encoding('UTF-8')
         end
-        Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        # Hash[ s.members.map { |m| [ m, s[m] ] } ]
       }.to_not raise_exception
     end
   end
 
-  describe '.process_argv', focus€: true do
+  describe '.process_argv' do
     it 'works' do
       expect {
-        s = GTop::ProcessArgs.new
-        addr = GTop.process_argv(s, Process.pid, 0)
+        s = described_class::ProcessArgs.new
+        addr = described_class.process_argv(s, Process.pid, 0)
         ptr = FFI::Pointer.new(:pointer, addr)
-        ap = FFI::AutoPointer.new ptr,
-                            GTop::GLib.method(:g_strfreev)
+        ap = FFI::AutoPointer.new ptr, described_class::GLib.method(:g_strfreev)
         if ap.null?
           nil
         else
           ap.get_array_of_string(0).map{ |v| v.force_encoding('UTF-8') }
         end
-        Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        # Hash[ s.members.map { |m| [ m, s[m] ] } ]
+      }.to_not raise_exception
+    end
+  end
+
+  describe '.process_memory_maps' do
+    it 'works' do
+      expect {
+        s = described_class::ProcessMemoryMaps.new
+        addr = described_class.process_memory_maps(s, Process.pid)
+        ss = described_class::MemoryMapEntry.new(addr)
+        # Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        # Hash[ ss.members.map { |m| [ m, m == :filename ? ss[m].to_s.force_encoding('UTF-8') : ss[m] ] } ]
       }.to_not raise_exception
     end
   end
