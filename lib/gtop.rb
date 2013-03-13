@@ -5,6 +5,8 @@ module GTop
   ffi_lib 'libgtop-2.0'
 
   typedef :int64,  :gint64
+  typedef :uint8,  :guint8
+  typedef :uint32, :guint32
   typedef :uint64, :guint64
   typedef :ulong,  :uintptr_t
 
@@ -49,6 +51,8 @@ module GTop
   attach_function :process_args,        :glibtop_get_proc_args,    [:pointer, :pid_t, :uint],    :pointer
   attach_function :process_argv,        :glibtop_get_proc_argv,    [:pointer, :pid_t, :uint],    :pointer
   attach_function :process_memory_maps, :glibtop_get_proc_map,     [:pointer, :pid_t],           :pointer
+  attach_function :network_load,        :glibtop_get_netload,      [:pointer, :string],          :void
+
 end
 
 require 'gtop/glib'
@@ -68,3 +72,4 @@ require 'gtop/process_segment'
 require 'gtop/process_args'
 require 'gtop/process_memory_maps'
 require 'gtop/memory_map_entry'
+require 'gtop/network_load'

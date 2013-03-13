@@ -137,4 +137,10 @@ describe GTop do
     end
   end
 
+  describe '.network_load' do
+    it 'works' do
+      expect{ described_class.network_load(described_class::NetworkLoad.new, 'wlan0') }.to_not raise_exception
+    end
+  end
+
 end
