@@ -1,4 +1,5 @@
 require 'gtop'
+require 'gtop/glib'
 
 module GTop
   class MemoryMapEntry < FFI::ManagedStruct

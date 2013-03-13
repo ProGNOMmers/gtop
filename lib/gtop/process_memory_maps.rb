@@ -1,5 +1,4 @@
 require 'gtop'
-require 'gtop/glib'
 
 module GTop
   class ProcessMemoryMaps < FFI::Struct
