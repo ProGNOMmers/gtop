@@ -130,9 +130,17 @@ describe GTop do
       expect {
         s = described_class::ProcessMemoryMaps.new
         addr = described_class.process_memory_maps(s, Process.pid)
-        ss = described_class::MemoryMapEntry.new(addr)
-        # Hash[ s.members.map { |m| [ m, s[m] ] } ]
-        # Hash[ ss.members.map { |m| [ m, m == :filename ? ss[m].to_s.force_encoding('UTF-8') : ss[m] ] } ]
+
+        # p Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        ss_pointer = FFI::Pointer.new(described_class::MemoryMapEntry, addr)
+        # why doesn't AutoPointer work?
+        # ss_pointer = FFI::AutoPointer.new pre_ss_pointer, described_class::GLib.method(:g_free)
+        s[:number].times do |i|
+          ssi = described_class::MemoryMapEntry.new(ss_pointer[i])
+          # p Hash[ ssi.members.map { |m| [ m, [:filename].include?(m) ? ssi[m].to_s.force_encoding('UTF-8') : ssi[m] ] } ]
+        end
+
+        described_class::GLib.g_free ss_pointer
       }.to_not raise_exception
     end
   end
@@ -150,16 +158,15 @@ describe GTop do
         addr = described_class.mount_list(s, 1)
 
         # p Hash[ s.members.map { |m| [ m, s[m] ] } ]
-        ss_count = s[:number]
-        val_array = FFI::Pointer.new(described_class::MountEntry, addr)
-        # why does not AutoPointer work?
-        # val_array = FFI::AutoPointer.new pre_val_array, described_class::GLib.method(:g_free)
-        ss_count.times do |i|
-          sss = described_class::MountEntry.new(val_array[i])
-          # p Hash[ sss.members.map { |m| [ m, [:devname, :mountdir, :type].include?(m) ? sss[m].to_s.force_encoding('UTF-8') : sss[m] ] } ]
+        ss_pointer = FFI::Pointer.new(described_class::MountEntry, addr)
+        # why doesn't AutoPointer work?
+        # ss_pointer = FFI::AutoPointer.new pre_ss_pointer, described_class::GLib.method(:g_free)
+        s[:number].times do |i|
+          ssi = described_class::MountEntry.new(ss_pointer[i])
+          # p Hash[ ssi.members.map { |m| [ m, [:devname, :mountdir, :type].include?(m) ? ssi[m].to_s.force_encoding('UTF-8') : ssi[m] ] } ]
         end
 
-        described_class::GLib.g_free val_array
+        described_class::GLib.g_free ss_pointer
       }.to_not raise_exception
     end
   end
