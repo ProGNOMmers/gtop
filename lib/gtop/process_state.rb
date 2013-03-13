@@ -4,7 +4,7 @@ module GTop
   class ProcessState < FFI::Struct
     layout :flags,           :guint64,
            :cmd,            [:char, 40],
-           :state,           :char,
+           :state,           :uint,
            :uid,             :int,
            :gid,             :int,
            :ruid,            :int,
