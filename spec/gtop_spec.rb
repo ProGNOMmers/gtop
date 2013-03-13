@@ -143,4 +143,24 @@ describe GTop do
     end
   end
 
+  describe '.process_mount_list' do
+    it 'works' do
+      expect {
+        s = described_class::MountList.new
+        addr = described_class.mount_list(s, 1)
+
+        # p Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        ss_count = s[:number]
+        val_array = FFI::Pointer.new(described_class::MountEntry, addr)
+        # why does not AutoPointer work?
+        # val_array = FFI::AutoPointer.new pre_val_array, described_class::GLib.method(:g_free)
+        ss_count.times do |i|
+          sss = described_class::MountEntry.new(val_array[i])
+          # p Hash[ sss.members.map { |m| [ m, [:devname, :mountdir, :type].include?(m) ? sss[m].to_s.force_encoding('UTF-8') : sss[m] ] } ]
+        end
+
+        described_class::GLib.g_free val_array
+      }.to_not raise_exception
+    end
+  end
 end

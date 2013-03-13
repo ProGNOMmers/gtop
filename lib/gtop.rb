@@ -35,6 +35,9 @@ module GTop
   #   glibtop_get_proc_map
   MAP_FILENAME_LEN = 215
 
+  #   glibtop_mountlist
+  MOUNTENTRY_LEN = 79
+
   attach_function :cpu,                 :glibtop_get_cpu,          [:pointer],                   :void
   attach_function :memory,              :glibtop_get_mem,          [:pointer],                   :void
   attach_function :swap,                :glibtop_get_swap,         [:pointer],                   :void
@@ -52,6 +55,7 @@ module GTop
   attach_function :process_argv,        :glibtop_get_proc_argv,    [:pointer, :pid_t, :uint],    :pointer
   attach_function :process_memory_maps, :glibtop_get_proc_map,     [:pointer, :pid_t],           :pointer
   attach_function :network_load,        :glibtop_get_netload,      [:pointer, :string],          :void
+  attach_function :mount_list,          :glibtop_get_mountlist,    [:pointer, :pid_t],           :pointer
 
 end
 
@@ -73,3 +77,5 @@ require 'gtop/process_args'
 require 'gtop/process_memory_maps'
 require 'gtop/memory_map_entry'
 require 'gtop/network_load'
+require 'gtop/mount_list'
+require 'gtop/mount_entry'
