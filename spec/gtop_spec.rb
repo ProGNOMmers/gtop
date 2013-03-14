@@ -170,4 +170,10 @@ describe GTop do
       }.to_not raise_exception
     end
   end
+
+  describe '.file_system_usage' do
+    it 'works' do
+      expect{ described_class.file_system_usage(described_class::FileSystemUsage.new, '/') }.to_not raise_exception
+    end
+  end
 end

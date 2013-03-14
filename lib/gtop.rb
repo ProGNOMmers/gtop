@@ -56,7 +56,7 @@ module GTop
   attach_function :process_memory_maps, :glibtop_get_proc_map,     [:pointer, :pid_t],           :pointer
   attach_function :network_load,        :glibtop_get_netload,      [:pointer, :string],          :void
   attach_function :mount_list,          :glibtop_get_mountlist,    [:pointer, :pid_t],           :pointer
-
+  attach_function :file_system_usage,   :glibtop_get_fsusage,      [:pointer, :string],          :void
 end
 
 require 'gtop/glib'
@@ -79,3 +79,4 @@ require 'gtop/memory_map_entry'
 require 'gtop/network_load'
 require 'gtop/mount_list'
 require 'gtop/mount_entry'
+require 'gtop/file_system_usage'
