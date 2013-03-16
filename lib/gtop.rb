@@ -57,6 +57,11 @@ module GTop
   attach_function :network_load,        :glibtop_get_netload,      [:pointer, :string],          :void
   attach_function :mount_list,          :glibtop_get_mountlist,    [:pointer, :pid_t],           :pointer
   attach_function :file_system_usage,   :glibtop_get_fsusage,      [:pointer, :string],          :void
+  attach_function :init_global_server,  :glibtop_init,             [],                           :void
+
+
+  # attach_function :get_parameter,       :glibtop_get_parameter,    [:uint, :pointer, :size_t],   :size_t
+  # attach_function :set_parameter,       :glibtop_set_parameter,    [:uint, :pointer, :size_t],   :void
 end
 
 require 'gtop/glib'
