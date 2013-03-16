@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe GTop do
+  describe '.init_global_server' do
+    it 'works' do
+      expect{ described_class.init_global_server }.to_not raise_exception
+    end
+  end
 
   describe '.cpu' do
     it 'works' do
@@ -177,9 +182,20 @@ describe GTop do
     end
   end
 
-  describe '.init_global_server' do
+  describe '.shared_memory_limits' do
     it 'works' do
-      expect{ described_class.init_global_server }.to_not raise_exception
+      expect{ described_class.shared_memory_limits(described_class::SharedMemoryLimits.new) }.to_not raise_exception
+    end
+  end
+
+  describe '.netowrk_devices_list', focus: true do
+    it 'works' do
+      expect{ 
+        s = described_class::NetworkDevicesList.new
+        ptr = described_class.network_devices_list(s)
+        ap = FFI::AutoPointer.new ptr, described_class::GLib.method(:g_strfreev)
+        p ap.get_array_of_string(0).map{ |v| v.force_encoding('UTF-8') }
+      }.to_not raise_exception
     end
   end
 end
