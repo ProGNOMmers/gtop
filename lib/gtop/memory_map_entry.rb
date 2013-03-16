@@ -1,5 +1,4 @@
 require 'gtop'
-require 'gtop/glib'
 
 module GTop
   class MemoryMapEntry < FFI::Struct
@@ -17,6 +16,5 @@ module GTop
            :private_clean,  :guint64, 
            :private_dirty,  :guint64,
            :filename,      [:char, MAP_FILENAME_LEN+1]
-
   end
 end

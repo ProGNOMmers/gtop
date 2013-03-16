@@ -7,6 +7,12 @@ describe GTop do
     end
   end
 
+  describe '.close_global_server' do
+    it 'works' do
+      expect{ described_class.close_global_server }.to_not raise_exception
+    end
+  end
+
   describe '.cpu' do
     it 'works' do
       expect{ described_class.cpu(described_class::Cpu.new) }.to_not raise_exception
@@ -163,6 +169,7 @@ describe GTop do
         addr = described_class.mount_list(s, 1)
 
         # p Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        # ss_pointer = FFI::Pointer.new(described_class::MountEntry, addr)
         ss_pointer = FFI::Pointer.new(described_class::MountEntry, addr)
         # why doesn't AutoPointer work?
         # ss_pointer = FFI::AutoPointer.new pre_ss_pointer, described_class::GLib.method(:g_free)
@@ -188,13 +195,50 @@ describe GTop do
     end
   end
 
-  describe '.netowrk_devices_list', focus: true do
+  describe '.network_devices_list' do
     it 'works' do
       expect{ 
         s = described_class::NetworkDevicesList.new
         ptr = described_class.network_devices_list(s)
         ap = FFI::AutoPointer.new ptr, described_class::GLib.method(:g_strfreev)
-        p ap.get_array_of_string(0).map{ |v| v.force_encoding('UTF-8') }
+        # p ap.get_array_of_string(0).map{ |v| v.force_encoding('UTF-8') }
+      }.to_not raise_exception
+    end
+  end
+
+  describe '.process_open_files' do
+    it 'works' do
+      expect{ 
+        s = described_class::ProcessOpenFiles.new
+        addr = described_class.process_open_files(s, Process.pid)
+        ss_pointer = FFI::Pointer.new(described_class::OpenFilesEntry, addr)
+        s[:number].times do |i|
+          ssi = described_class::OpenFilesEntry.new(ss_pointer[i])
+          # p Hash[ ssi.members.map { |m|
+          #   [ m, 
+          #     case m
+          #     when :info
+          #       case ssi[:type]
+          #       when described_class::FILE_TYPE_FILE
+          #         sss = ssi[:info][:file]
+          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding('UTF-8') : sss[m] ] } ]
+          #       when described_class::FILE_TYPE_PIPE
+          #         'pipe'
+          #       when described_class::FILE_TYPE_INETSOCKET, described_class::FILE_TYPE_INET6SOCKET
+          #         sss = ssi[:info][:sock]
+          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding('UTF-8') : sss[m] ] } ]
+          #       when described_class::FILE_TYPE_LOCALSOCKET
+          #         sss = ssi[:info][:localsock]
+          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding('UTF-8') : sss[m] ] } ]
+          #       else
+          #         nil
+          #       end
+          #     else
+          #       ssi[m]
+          #     end ]
+          # } ]
+        end
+        described_class::GLib.g_free ss_pointer
       }.to_not raise_exception
     end
   end
