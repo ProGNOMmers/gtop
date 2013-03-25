@@ -52,7 +52,7 @@ module GTop
   FILE_TYPE_LOCALSOCKET = 8
   FILE_TYPE_INET6SOCKET = 16
 
-  attach_function :init_global_server,   :glibtop_init,                [],                           :void
+  attach_function :init_global_server,   :glibtop_init,                [],                           :pointer
   attach_function :close_global_server,  :glibtop_close,               [],                           :void
   attach_function :cpu,                  :glibtop_get_cpu,             [:pointer],                   :void
   attach_function :memory,               :glibtop_get_mem,             [:pointer],                   :void
@@ -83,6 +83,8 @@ module GTop
 end
 
 require 'gtop/glib'
+require 'gtop/system_dependencies'
+require 'gtop/glibtop'
 require 'gtop/cpu'
 require 'gtop/memory'
 require 'gtop/swap'

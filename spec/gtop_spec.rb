@@ -3,7 +3,7 @@ require 'spec_helper'
 describe GTop do
   describe '.init_global_server' do
     it 'works' do
-      expect{ described_class.init_global_server }.to_not raise_exception
+      expect { described_class::Glibtop.new described_class.init_global_server }.to_not raise_exception
     end
   end
 
