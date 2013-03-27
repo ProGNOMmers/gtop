@@ -144,14 +144,11 @@ describe GTop do
 
         # p Hash[ s.members.map { |m| [ m, s[m] ] } ]
         ss_pointer = FFI::Pointer.new(described_class::MemoryMapEntry, addr)
-        # why doesn't AutoPointer work?
-        # ss_pointer = FFI::AutoPointer.new pre_ss_pointer, described_class::GLib.method(:g_free)
+        ss_pointer = FFI::AutoPointer.new ss_pointer, described_class::GLib.method(:g_free)
         s[:number].times do |i|
-          ssi = described_class::MemoryMapEntry.new(ss_pointer[i])
-          # p Hash[ ssi.members.map { |m| [ m, [:filename].include?(m) ? ssi[m].to_s.force_encoding('UTF-8') : ssi[m] ] } ]
+          ssi = described_class::MemoryMapEntry.new(ss_pointer + (i * described_class::MemoryMapEntry.size))
+          # p Hash[ ssi.members.map { |m| [ m, ssi[m].is_a?(FFI::StructLayout::CharArray) ? ssi[m].to_s.force_encoding('UTF-8') : ssi[m] ] } ]
         end
-
-        described_class::GLib.g_free ss_pointer
       }.to_not raise_exception
     end
   end
@@ -169,16 +166,12 @@ describe GTop do
         addr = described_class.mount_list(s, 1)
 
         # p Hash[ s.members.map { |m| [ m, s[m] ] } ]
-        # ss_pointer = FFI::Pointer.new(described_class::MountEntry, addr)
         ss_pointer = FFI::Pointer.new(described_class::MountEntry, addr)
-        # why doesn't AutoPointer work?
-        # ss_pointer = FFI::AutoPointer.new pre_ss_pointer, described_class::GLib.method(:g_free)
+        ss_pointer = FFI::AutoPointer.new ss_pointer, described_class::GLib.method(:g_free)
         s[:number].times do |i|
-          ssi = described_class::MountEntry.new(ss_pointer[i])
-          # p Hash[ ssi.members.map { |m| [ m, [:devname, :mountdir, :type].include?(m) ? ssi[m].to_s.force_encoding('UTF-8') : ssi[m] ] } ]
+          ssi = described_class::MountEntry.new(ss_pointer + (i * described_class::MountEntry.size))
+          # p Hash[ ssi.members.map { |m| [ m, ssi[m].is_a?(FFI::StructLayout::CharArray) ? ssi[m].to_s.force_encoding('UTF-8') : ssi[m] ] } ]
         end
-
-        described_class::GLib.g_free ss_pointer
       }.to_not raise_exception
     end
   end
@@ -212,8 +205,9 @@ describe GTop do
         s = described_class::ProcessOpenFiles.new
         addr = described_class.process_open_files(s, Process.pid)
         ss_pointer = FFI::Pointer.new(described_class::OpenFilesEntry, addr)
+        ss_pointer = FFI::AutoPointer.new ss_pointer, described_class::GLib.method(:g_free)
         s[:number].times do |i|
-          ssi = described_class::OpenFilesEntry.new(ss_pointer[i])
+          ssi = described_class::OpenFilesEntry.new(ss_pointer + (i * described_class::OpenFilesEntry.size))
           # p Hash[ ssi.members.map { |m|
           #   [ m, 
           #     case m
@@ -238,7 +232,6 @@ describe GTop do
           #     end ]
           # } ]
         end
-        described_class::GLib.g_free ss_pointer
       }.to_not raise_exception
     end
   end
