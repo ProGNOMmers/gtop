@@ -1,4 +1,5 @@
 require 'ffi'
+require 'ffi/tools/const_generator'
 
 module GTop
   extend FFI::Library
@@ -13,6 +14,12 @@ module GTop
 
   # Constants
   # TODO global review
+
+  cg = FFI::ConstGenerator.new('libgtop-2.0', cppflags: '-I/usr/include/libgtop-2.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include') do |gen|
+    gen.include 'glibtop/cpu.h'
+    gen.const(:GLIBTOP_NCPU)
+  end
+  puts cg.to_ruby
 
   #   Max CPU number
   NCPU = 32
