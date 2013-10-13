@@ -9,41 +9,41 @@ describe GTop do
 
   describe '.close_global_server' do
     it 'works' do
-      expect{ described_class.close_global_server }.to_not raise_exception
+      expect { described_class.close_global_server }.to_not raise_exception
     end
   end
 
   describe '.cpu' do
     it 'works' do
-      expect{ described_class.cpu(described_class::Cpu.new) }.to_not raise_exception
+      expect { described_class.cpu(described_class::Cpu.new) }.to_not raise_exception
     end
   end
 
   describe '.memory' do
     it 'works' do
-      expect{ described_class.memory(described_class::Memory.new) }.to_not raise_exception
+      expect { described_class.memory(described_class::Memory.new) }.to_not raise_exception
     end
   end
 
   describe '.swap' do
     it 'works' do
-      expect{ described_class.swap(described_class::Swap.new) }.to_not raise_exception
+      expect { described_class.swap(described_class::Swap.new) }.to_not raise_exception
     end
   end
 
   describe '.uptime' do
     it 'works' do
-      expect{ described_class.uptime(described_class::Uptime.new) }.to_not raise_exception
+      expect { described_class.uptime(described_class::Uptime.new) }.to_not raise_exception
     end
   end
 
   describe '.load_average' do
     it 'works' do
-      expect{ described_class.load_average(described_class::LoadAverage.new) }.to_not raise_exception
+      expect { described_class.load_average(described_class::LoadAverage.new) }.to_not raise_exception
     end
   end
 
-  describe '.process_list' do
+  describe '.process_list', focus: true do
     it 'works' do
       expect {
         s = described_class::ProcessList.new
@@ -55,50 +55,50 @@ describe GTop do
         else
           ap.read_array_of_uint(s[:number])
         end
-        # Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        p Hash[ s.members.map { |m| [ m, s[m] ] } ]
       }.to_not raise_exception
     end
   end
 
   describe '.process_state' do
     it 'works' do
-      expect{ described_class.process_state(described_class::ProcessState.new, Process.pid) }.to_not raise_exception
+      expect { described_class.process_state(described_class::ProcessState.new, Process.pid) }.to_not raise_exception
     end
   end
 
   describe '.process_uid' do
     it 'works' do
-      expect{ described_class.process_uid(described_class::ProcessUid.new, Process.pid) }.to_not raise_exception
+      expect { described_class.process_uid(described_class::ProcessUid.new, Process.pid) }.to_not raise_exception
     end
   end
 
   describe '.process_memory' do
     it 'works' do
-      expect{ described_class.process_memory(described_class::ProcessMemory.new, Process.pid) }.to_not raise_exception
+      expect { described_class.process_memory(described_class::ProcessMemory.new, Process.pid) }.to_not raise_exception
     end
   end
 
   describe '.process_time' do
     it 'works' do
-      expect{ described_class.process_time(described_class::ProcessTime.new, Process.pid) }.to_not raise_exception
+      expect { described_class.process_time(described_class::ProcessTime.new, Process.pid) }.to_not raise_exception
     end
   end
 
   describe '.process_signal' do
     it 'works' do
-      expect{ described_class.process_signal(described_class::ProcessSignal.new, Process.pid) }.to_not raise_exception
+      expect { described_class.process_signal(described_class::ProcessSignal.new, Process.pid) }.to_not raise_exception
     end
   end
 
   describe '.process_kernel' do
     it 'works' do
-      expect{ described_class.process_kernel(described_class::ProcessKernel.new, Process.pid) }.to_not raise_exception
+      expect { described_class.process_kernel(described_class::ProcessKernel.new, Process.pid) }.to_not raise_exception
     end
   end
 
   describe '.process_segment' do
     it 'works' do
-      expect{ described_class.process_segment(described_class::ProcessSegment.new, Process.pid) }.to_not raise_exception
+      expect { described_class.process_segment(described_class::ProcessSegment.new, Process.pid) }.to_not raise_exception
     end
   end
 
@@ -155,7 +155,7 @@ describe GTop do
 
   describe '.network_load' do
     it 'works' do
-      expect{ described_class.network_load(described_class::NetworkLoad.new, 'wlan0') }.to_not raise_exception
+      expect { described_class.network_load(described_class::NetworkLoad.new, 'eth0') }.to_not raise_exception
     end
   end
 
@@ -178,19 +178,19 @@ describe GTop do
 
   describe '.file_system_usage' do
     it 'works' do
-      expect{ described_class.file_system_usage(described_class::FileSystemUsage.new, '/') }.to_not raise_exception
+      expect { described_class.file_system_usage(described_class::FileSystemUsage.new, '/') }.to_not raise_exception
     end
   end
 
   describe '.shared_memory_limits' do
     it 'works' do
-      expect{ described_class.shared_memory_limits(described_class::SharedMemoryLimits.new) }.to_not raise_exception
+      expect { described_class.shared_memory_limits(described_class::SharedMemoryLimits.new) }.to_not raise_exception
     end
   end
 
   describe '.network_devices_list' do
     it 'works' do
-      expect{ 
+      expect { 
         s = described_class::NetworkDevicesList.new
         ptr = described_class.network_devices_list(s)
         ap = FFI::AutoPointer.new ptr, described_class::GLib.method(:g_strfreev)
@@ -201,7 +201,7 @@ describe GTop do
 
   describe '.process_open_files' do
     it 'works' do
-      expect{ 
+      expect { 
         s = described_class::ProcessOpenFiles.new
         addr = described_class.process_open_files(s, Process.pid)
         ss_pointer = FFI::Pointer.new(described_class::OpenFilesEntry, addr)
@@ -233,6 +233,12 @@ describe GTop do
           # } ]
         end
       }.to_not raise_exception
+    end
+  end
+
+  describe '.system_dependencies' do
+    it 'works' do
+      expect { described_class.system_dependencies(described_class::SystemDependencies.new) }.to_not raise_exception
     end
   end
 end
