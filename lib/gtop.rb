@@ -8,12 +8,13 @@ module GTop
 
   require 'gtop/glib/types'
   include GLib::Types
-  typedef :ulong,  :uintptr_t
+
+  typedef :ulong, :uintptr_t
 
   require 'gtop/constants'
   require 'gtop/glib'
   require 'gtop/system_dependencies'
-  require 'gtop/glibtop'
+  # require 'gtop/glibtop'
   require 'gtop/cpu'
   require 'gtop/memory'
   require 'gtop/swap'
@@ -43,9 +44,10 @@ module GTop
   require 'gtop/mount_entry'
   require 'gtop/file_system_usage'
 
-  attach_function :init_global_server,   :glibtop_init,                [],                           :pointer
-  attach_function :close_global_server,  :glibtop_close,               [],                           :void
+  # attach_function :init_global_server,   :glibtop_init,                [],                           :pointer
+  # attach_function :close_global_server,  :glibtop_close,               [],                           :void
   attach_function :cpu,                  :glibtop_get_cpu,             [:pointer],                   :void
+  # TO CHECK
   attach_function :memory,               :glibtop_get_mem,             [:pointer],                   :void
   attach_function :swap,                 :glibtop_get_swap,            [:pointer],                   :void
   attach_function :uptime,               :glibtop_get_uptime,          [:pointer],                   :void

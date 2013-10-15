@@ -3,12 +3,14 @@ require 'spec_helper'
 describe GTop do
   describe '.init_global_server' do
     it 'works' do
+      pending "think about removing global server related functions (glibtop_machine could be a problem and shouldn't be useful anyway)"
       expect { described_class::Glibtop.new described_class.init_global_server }.to_not raise_exception
     end
   end
 
   describe '.close_global_server' do
     it 'works' do
+      pending "think about removing global server related functions (glibtop_machine could be a problem and shouldn't be useful anyway)"
       expect { described_class.close_global_server }.to_not raise_exception
     end
   end
@@ -55,7 +57,7 @@ describe GTop do
         else
           ap.read_array_of_uint(s[:number])
         end
-        p Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        # p Hash[ s.members.map { |m| [ m, s[m] ] } ]
       }.to_not raise_exception
     end
   end
