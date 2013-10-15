@@ -2,7 +2,8 @@ require 'gtop'
 
 module GTop
   class Memory < FFI::Struct
-    layout :total,  :guint64,
+    layout :flags,  :guint64,
+           :total,  :guint64,
            :used,   :guint64,
            :free,   :guint64,
            :shared, :guint64,

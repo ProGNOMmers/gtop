@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+# TODO test structures
 describe GTop do
   describe '.init_global_server' do
     it 'works' do
@@ -45,6 +46,12 @@ describe GTop do
     end
   end
 
+  describe '.shared_memory_limits' do
+    it 'works' do
+      expect { described_class.shared_memory_limits(described_class::SharedMemoryLimits.new) }.to_not raise_exception
+    end
+  end
+
   describe '.process_list' do
     it 'works' do
       expect {
@@ -55,9 +62,10 @@ describe GTop do
         if ap.null?
           nil
         else
-          ap.read_array_of_uint(s[:number])
+          # s[:number] : process list size; ap : array of pids
+          p ap.read_array_of_uint(s[:number])
         end
-        # p Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        p Hash[ s.members.map { |m| [ m, s[m] ] } ]
       }.to_not raise_exception
     end
   end
@@ -181,12 +189,6 @@ describe GTop do
   describe '.file_system_usage' do
     it 'works' do
       expect { described_class.file_system_usage(described_class::FileSystemUsage.new, '/') }.to_not raise_exception
-    end
-  end
-
-  describe '.shared_memory_limits' do
-    it 'works' do
-      expect { described_class.shared_memory_limits(described_class::SharedMemoryLimits.new) }.to_not raise_exception
     end
   end
 

@@ -9,7 +9,7 @@ module GTop
   require 'gtop/glib/types'
   include GLib::Types
 
-  typedef :ulong, :uintptr_t
+  typedef :ulong, :pid_t_ptr
 
   require 'gtop/constants'
   require 'gtop/glib'
@@ -47,13 +47,13 @@ module GTop
   # attach_function :init_global_server,   :glibtop_init,                [],                           :pointer
   # attach_function :close_global_server,  :glibtop_close,               [],                           :void
   attach_function :cpu,                  :glibtop_get_cpu,             [:pointer],                   :void
-  # TO CHECK
   attach_function :memory,               :glibtop_get_mem,             [:pointer],                   :void
   attach_function :swap,                 :glibtop_get_swap,            [:pointer],                   :void
   attach_function :uptime,               :glibtop_get_uptime,          [:pointer],                   :void
   attach_function :load_average,         :glibtop_get_loadavg,         [:pointer],                   :void
   attach_function :shared_memory_limits, :glibtop_get_shm_limits,      [:pointer],                   :void
-  attach_function :process_list,         :glibtop_get_proclist,        [:pointer, :gint64, :gint64], :uintptr_t
+  attach_function :process_list,         :glibtop_get_proclist,        [:pointer, :gint64, :gint64], :pid_t_ptr
+  # TO CHECK
   attach_function :process_state,        :glibtop_get_proc_state,      [:pointer, :pid_t],           :void
   attach_function :process_uid,          :glibtop_get_proc_uid,        [:pointer, :pid_t],           :void
   attach_function :process_memory,       :glibtop_get_proc_mem,        [:pointer, :pid_t],           :void
