@@ -1,0 +1,3 @@
+[submodule "libgtop"]
+	path = libgtop
+	url = git://git.gnome.org/libgtop
