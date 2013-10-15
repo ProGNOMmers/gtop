@@ -6,11 +6,8 @@ module GTop
 
   ffi_lib 'libgtop-2.0'
 
-  typedef :int64,  :gint64
-  typedef :uint8,  :guint8
-  typedef :uint16, :guint16
-  typedef :uint32, :guint32
-  typedef :uint64, :guint64
+  require 'gtop/glib/types'
+  include GLib::Types
   typedef :ulong,  :uintptr_t
 
   require 'gtop/constants'
@@ -71,6 +68,9 @@ module GTop
   attach_function :mount_list,           :glibtop_get_mountlist,       [:pointer, :pid_t],           :pointer
   attach_function :file_system_usage,    :glibtop_get_fsusage,         [:pointer, :string],          :void
   attach_function :system_dependencies,  :glibtop_get_sysdeps,         [:pointer],                   :void
+
+  #attach_function :process_affinity,     :glibtop_get_proc_affinity,   [:pointer, :pid_t],           :pointer
+  # guint16 * glibtop_get_proc_affinity(glibtop_proc_affinity *buf, pid_t pid);
 
   # glibtop_get_proc_affinity
   # glibtop_get_proc_wd

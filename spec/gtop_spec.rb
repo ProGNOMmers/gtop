@@ -43,7 +43,7 @@ describe GTop do
     end
   end
 
-  describe '.process_list', focus: true do
+  describe '.process_list' do
     it 'works' do
       expect {
         s = described_class::ProcessList.new
@@ -155,7 +155,7 @@ describe GTop do
 
   describe '.network_load' do
     it 'works' do
-      expect { described_class.network_load(described_class::NetworkLoad.new, 'eth0') }.to_not raise_exception
+      expect { described_class.network_load(described_class::NetworkLoad.new, 'lo') }.to_not raise_exception
     end
   end
 
