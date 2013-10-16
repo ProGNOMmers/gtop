@@ -45,36 +45,37 @@ module GTop
   require 'gtop/mount_entry'
   require 'gtop/file_system_usage'
   require 'gtop/process_affinity'
+  require 'gtop/process_working_directory'
 
   # attach_function :init_global_server,   :glibtop_init,                [],                           :pointer
   # attach_function :close_global_server,  :glibtop_close,               [],                           :void
-  attach_function :cpu,                  :glibtop_get_cpu,             [:pointer],                   :void
-  attach_function :memory,               :glibtop_get_mem,             [:pointer],                   :void
-  attach_function :swap,                 :glibtop_get_swap,            [:pointer],                   :void
-  attach_function :uptime,               :glibtop_get_uptime,          [:pointer],                   :void
-  attach_function :load_average,         :glibtop_get_loadavg,         [:pointer],                   :void
-  attach_function :shared_memory_limits, :glibtop_get_shm_limits,      [:pointer],                   :void
-  attach_function :process_list,         :glibtop_get_proclist,        [:pointer, :gint64, :gint64], :pid_t_ptr
-  attach_function :process_state,        :glibtop_get_proc_state,      [:pointer, :pid_t],           :void
-  attach_function :process_uid,          :glibtop_get_proc_uid,        [:pointer, :pid_t],           :void
-  attach_function :process_memory,       :glibtop_get_proc_mem,        [:pointer, :pid_t],           :void
-  attach_function :process_time,         :glibtop_get_proc_time,       [:pointer, :pid_t],           :void
-  attach_function :process_signal,       :glibtop_get_proc_signal,     [:pointer, :pid_t],           :void
-  attach_function :process_kernel,       :glibtop_get_proc_kernel,     [:pointer, :pid_t],           :void
-  attach_function :process_segment,      :glibtop_get_proc_segment,    [:pointer, :pid_t],           :void
-  attach_function :process_args,         :glibtop_get_proc_args,       [:pointer, :pid_t, :uint],    :pointer
-  attach_function :process_argv,         :glibtop_get_proc_argv,       [:pointer, :pid_t, :uint],    :pointer
-  attach_function :process_memory_maps,  :glibtop_get_proc_map,        [:pointer, :pid_t],           :pointer
-  attach_function :process_open_files,   :glibtop_get_proc_open_files, [:pointer, :pid_t],           :pointer
-  attach_function :network_devices_list, :glibtop_get_netlist,         [:pointer],                   :pointer
-  attach_function :network_load,         :glibtop_get_netload,         [:pointer, :string],          :void
-  attach_function :mount_list,           :glibtop_get_mountlist,       [:pointer, :int],             :pointer
-  attach_function :file_system_usage,    :glibtop_get_fsusage,         [:pointer, :string],          :void
-  attach_function :system_dependencies,  :glibtop_get_sysdeps,         [:pointer],                   :void
+  attach_function :cpu,                       :glibtop_get_cpu,             [:pointer],                   :void
+  attach_function :memory,                    :glibtop_get_mem,             [:pointer],                   :void
+  attach_function :swap,                      :glibtop_get_swap,            [:pointer],                   :void
+  attach_function :uptime,                    :glibtop_get_uptime,          [:pointer],                   :void
+  attach_function :load_average,              :glibtop_get_loadavg,         [:pointer],                   :void
+  attach_function :shared_memory_limits,      :glibtop_get_shm_limits,      [:pointer],                   :void
+  attach_function :process_list,              :glibtop_get_proclist,        [:pointer, :gint64, :gint64], :pid_t_ptr
+  attach_function :process_state,             :glibtop_get_proc_state,      [:pointer, :pid_t],           :void
+  attach_function :process_uid,               :glibtop_get_proc_uid,        [:pointer, :pid_t],           :void
+  attach_function :process_memory,            :glibtop_get_proc_mem,        [:pointer, :pid_t],           :void
+  attach_function :process_time,              :glibtop_get_proc_time,       [:pointer, :pid_t],           :void
+  attach_function :process_signal,            :glibtop_get_proc_signal,     [:pointer, :pid_t],           :void
+  attach_function :process_kernel,            :glibtop_get_proc_kernel,     [:pointer, :pid_t],           :void
+  attach_function :process_segment,           :glibtop_get_proc_segment,    [:pointer, :pid_t],           :void
+  attach_function :process_args,              :glibtop_get_proc_args,       [:pointer, :pid_t, :uint],    :pointer
+  attach_function :process_argv,              :glibtop_get_proc_argv,       [:pointer, :pid_t, :uint],    :pointer
+  attach_function :process_memory_maps,       :glibtop_get_proc_map,        [:pointer, :pid_t],           :pointer
+  attach_function :process_open_files,        :glibtop_get_proc_open_files, [:pointer, :pid_t],           :pointer
+  attach_function :network_devices_list,      :glibtop_get_netlist,         [:pointer],                   :pointer
+  attach_function :network_load,              :glibtop_get_netload,         [:pointer, :string],          :void
+  attach_function :mount_list,                :glibtop_get_mountlist,       [:pointer, :int],             :pointer
+  attach_function :file_system_usage,         :glibtop_get_fsusage,         [:pointer, :string],          :void
+  attach_function :system_dependencies,       :glibtop_get_sysdeps,         [:pointer],                   :void
+  attach_function :process_affinity,          :glibtop_get_proc_affinity,   [:pointer, :pid_t],           :guint16_ptr
+  # char ** glibtop_get_proc_wd(glibtop_proc_wd *buf, pid_t pid);
+  attach_function :process_working_directory, :glibtop_get_proc_wd,         [:pointer, :pid_t],           :pointer
 
-  attach_function :process_affinity,     :glibtop_get_proc_affinity,   [:pointer, :pid_t],           :guint16_ptr
-
-  # glibtop_get_proc_affinity
   # glibtop_get_proc_wd
   # glibtop_get_sem_limits
   # glibtop_get_msg_limits

@@ -249,7 +249,7 @@ describe GTop do
 
   describe '.process_affinity' do
     it 'works' do
-      expect { 
+      expect {
         s = described_class::ProcessAffinity.new
         addr = described_class.process_affinity(s, Process.pid)
         ptr = FFI::Pointer.new(:pointer, addr)
@@ -261,6 +261,23 @@ describe GTop do
           ap.read_array_of_uint(s[:number])
         end
         Hash[ s.members.map { |m| [ m, s[m] ] } ]
+      }.to_not raise_exception
+    end
+  end
+
+  describe '.process_working_directory' do
+    it 'works' do
+      expect {
+        s = described_class::ProcessWorkingDirectory.new
+        addr = described_class.process_working_directory(s, Process.pid)
+        ptr = FFI::Pointer.new(:pointer, addr)
+        ap = FFI::AutoPointer.new ptr, described_class::GLib.method(:g_strfreev)
+        if ap.null?
+          nil
+        else
+          ap.get_array_of_string(0).map{ |v| v.force_encoding('UTF-8') }
+        end
+        Hash[ s.members.map { |m| [ m, [:root, :exe].include?(m) ? s[m].to_s : s[m] ] } ]
       }.to_not raise_exception
     end
   end
