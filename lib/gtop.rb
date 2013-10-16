@@ -9,7 +9,8 @@ module GTop
   require 'gtop/glib/types'
   include GLib::Types
 
-  typedef :ulong, :pid_t_ptr
+  typedef :ulong,   :pid_t_ptr
+  typedef :pointer, :guint16_ptr
 
   require 'gtop/constants'
   require 'gtop/glib'
@@ -43,6 +44,7 @@ module GTop
   require 'gtop/mount_list'
   require 'gtop/mount_entry'
   require 'gtop/file_system_usage'
+  require 'gtop/process_affinity'
 
   # attach_function :init_global_server,   :glibtop_init,                [],                           :pointer
   # attach_function :close_global_server,  :glibtop_close,               [],                           :void
@@ -53,7 +55,6 @@ module GTop
   attach_function :load_average,         :glibtop_get_loadavg,         [:pointer],                   :void
   attach_function :shared_memory_limits, :glibtop_get_shm_limits,      [:pointer],                   :void
   attach_function :process_list,         :glibtop_get_proclist,        [:pointer, :gint64, :gint64], :pid_t_ptr
-  # TO CHECK
   attach_function :process_state,        :glibtop_get_proc_state,      [:pointer, :pid_t],           :void
   attach_function :process_uid,          :glibtop_get_proc_uid,        [:pointer, :pid_t],           :void
   attach_function :process_memory,       :glibtop_get_proc_mem,        [:pointer, :pid_t],           :void
@@ -67,16 +68,16 @@ module GTop
   attach_function :process_open_files,   :glibtop_get_proc_open_files, [:pointer, :pid_t],           :pointer
   attach_function :network_devices_list, :glibtop_get_netlist,         [:pointer],                   :pointer
   attach_function :network_load,         :glibtop_get_netload,         [:pointer, :string],          :void
-  attach_function :mount_list,           :glibtop_get_mountlist,       [:pointer, :pid_t],           :pointer
+  attach_function :mount_list,           :glibtop_get_mountlist,       [:pointer, :int],             :pointer
   attach_function :file_system_usage,    :glibtop_get_fsusage,         [:pointer, :string],          :void
   attach_function :system_dependencies,  :glibtop_get_sysdeps,         [:pointer],                   :void
 
-  #attach_function :process_affinity,     :glibtop_get_proc_affinity,   [:pointer, :pid_t],           :pointer
-  # guint16 * glibtop_get_proc_affinity(glibtop_proc_affinity *buf, pid_t pid);
+  attach_function :process_affinity,     :glibtop_get_proc_affinity,   [:pointer, :pid_t],           :guint16_ptr
 
   # glibtop_get_proc_affinity
   # glibtop_get_proc_wd
   # glibtop_get_sem_limits
+  # glibtop_get_msg_limits
   # glibtop_get_sysinfo
   # attach_function :get_parameter,       :glibtop_get_parameter,    [:uint, :pointer, :size_t],   :size_t
   # attach_function :set_parameter,       :glibtop_set_parameter,    [:uint, :pointer, :size_t],   :void

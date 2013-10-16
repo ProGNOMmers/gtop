@@ -63,9 +63,9 @@ describe GTop do
           nil
         else
           # s[:number] : process list size; ap : array of pids
-          p ap.read_array_of_uint(s[:number])
+          ap.read_array_of_uint(s[:number])
         end
-        p Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        Hash[ s.members.map { |m| [ m, s[m] ] } ]
       }.to_not raise_exception
     end
   end
@@ -124,7 +124,7 @@ describe GTop do
         else
           ap.read_string(s[:size]).force_encoding('UTF-8')
         end
-        # Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        Hash[ s.members.map { |m| [ m, s[m] ] } ]
       }.to_not raise_exception
     end
   end
@@ -141,7 +141,7 @@ describe GTop do
         else
           ap.get_array_of_string(0).map{ |v| v.force_encoding('UTF-8') }
         end
-        # Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        Hash[ s.members.map { |m| [ m, s[m] ] } ]
       }.to_not raise_exception
     end
   end
@@ -159,6 +159,55 @@ describe GTop do
           ssi = described_class::MemoryMapEntry.new(ss_pointer + (i * described_class::MemoryMapEntry.size))
           # p Hash[ ssi.members.map { |m| [ m, ssi[m].is_a?(FFI::StructLayout::CharArray) ? ssi[m].to_s.force_encoding('UTF-8') : ssi[m] ] } ]
         end
+      }.to_not raise_exception
+    end
+  end
+
+
+  describe '.process_open_files' do
+    it 'works' do
+      expect { 
+        s = described_class::ProcessOpenFiles.new
+        addr = described_class.process_open_files(s, Process.pid)
+        ss_pointer = FFI::Pointer.new(described_class::OpenFilesEntry, addr)
+        ss_pointer = FFI::AutoPointer.new ss_pointer, described_class::GLib.method(:g_free)
+        s[:number].times do |i|
+          ssi = described_class::OpenFilesEntry.new(ss_pointer + (i * described_class::OpenFilesEntry.size))
+          # Hash[ ssi.members.map { |m|
+          #   [ m, 
+          #     case m
+          #     when :info
+          #       case ssi[:type]
+          #       when described_class::FILE_TYPE_FILE
+          #         sss = ssi[:info][:file]
+          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding('UTF-8') : sss[m] ] } ]
+          #       when described_class::FILE_TYPE_PIPE
+          #         'pipe'
+          #       when described_class::FILE_TYPE_INETSOCKET, described_class::FILE_TYPE_INET6SOCKET
+          #         sss = ssi[:info][:sock]
+          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding('UTF-8') : sss[m] ] } ]
+          #       when described_class::FILE_TYPE_LOCALSOCKET
+          #         sss = ssi[:info][:localsock]
+          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding('UTF-8') : sss[m] ] } ]
+          #       else
+          #         nil
+          #       end
+          #     else
+          #       ssi[m]
+          #     end ]
+          # } ]
+        end
+      }.to_not raise_exception
+    end
+  end
+
+  describe '.network_devices_list' do
+    it 'works' do
+      expect { 
+        s = described_class::NetworkDevicesList.new
+        ptr = described_class.network_devices_list(s)
+        ap = FFI::AutoPointer.new ptr, described_class::GLib.method(:g_strfreev)
+        ap.get_array_of_string(0).map{ |v| v.force_encoding('UTF-8') }
       }.to_not raise_exception
     end
   end
@@ -192,57 +241,27 @@ describe GTop do
     end
   end
 
-  describe '.network_devices_list' do
-    it 'works' do
-      expect { 
-        s = described_class::NetworkDevicesList.new
-        ptr = described_class.network_devices_list(s)
-        ap = FFI::AutoPointer.new ptr, described_class::GLib.method(:g_strfreev)
-        # p ap.get_array_of_string(0).map{ |v| v.force_encoding('UTF-8') }
-      }.to_not raise_exception
-    end
-  end
-
-  describe '.process_open_files' do
-    it 'works' do
-      expect { 
-        s = described_class::ProcessOpenFiles.new
-        addr = described_class.process_open_files(s, Process.pid)
-        ss_pointer = FFI::Pointer.new(described_class::OpenFilesEntry, addr)
-        ss_pointer = FFI::AutoPointer.new ss_pointer, described_class::GLib.method(:g_free)
-        s[:number].times do |i|
-          ssi = described_class::OpenFilesEntry.new(ss_pointer + (i * described_class::OpenFilesEntry.size))
-          # p Hash[ ssi.members.map { |m|
-          #   [ m, 
-          #     case m
-          #     when :info
-          #       case ssi[:type]
-          #       when described_class::FILE_TYPE_FILE
-          #         sss = ssi[:info][:file]
-          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding('UTF-8') : sss[m] ] } ]
-          #       when described_class::FILE_TYPE_PIPE
-          #         'pipe'
-          #       when described_class::FILE_TYPE_INETSOCKET, described_class::FILE_TYPE_INET6SOCKET
-          #         sss = ssi[:info][:sock]
-          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding('UTF-8') : sss[m] ] } ]
-          #       when described_class::FILE_TYPE_LOCALSOCKET
-          #         sss = ssi[:info][:localsock]
-          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding('UTF-8') : sss[m] ] } ]
-          #       else
-          #         nil
-          #       end
-          #     else
-          #       ssi[m]
-          #     end ]
-          # } ]
-        end
-      }.to_not raise_exception
-    end
-  end
-
   describe '.system_dependencies' do
     it 'works' do
       expect { described_class.system_dependencies(described_class::SystemDependencies.new) }.to_not raise_exception
+    end
+  end
+
+  describe '.process_affinity' do
+    it 'works' do
+      expect { 
+        s = described_class::ProcessAffinity.new
+        addr = described_class.process_affinity(s, Process.pid)
+        ptr = FFI::Pointer.new(:pointer, addr)
+        ap = FFI::AutoPointer.new ptr, described_class::GLib.method(:g_free)
+        if ap.null?
+          nil
+        else
+          # s[:number] : affinity per cpu size; ap : array of affinity per cpu
+          ap.read_array_of_uint(s[:number])
+        end
+        Hash[ s.members.map { |m| [ m, s[m] ] } ]
+      }.to_not raise_exception
     end
   end
 end
