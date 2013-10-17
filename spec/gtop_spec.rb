@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 # TODO test structures
+# TODO force UTF-8 on every string and tests
 describe GTop do
   describe '.init_global_server' do
     it 'works' do
@@ -122,7 +123,7 @@ describe GTop do
         if ap.null?
           nil
         else
-          ap.read_string(s[:size]).force_encoding('UTF-8')
+          ap.read_string(s[:size]).force_encoding(Encoding.default_external)
         end
         Hash[ s.members.map { |m| [ m, s[m] ] } ]
       }.to_not raise_exception
@@ -139,7 +140,7 @@ describe GTop do
         if ap.null?
           nil
         else
-          ap.get_array_of_string(0).map{ |v| v.force_encoding('UTF-8') }
+          ap.get_array_of_string(0).map{ |v| v.force_encoding(Encoding.default_external) }
         end
         Hash[ s.members.map { |m| [ m, s[m] ] } ]
       }.to_not raise_exception
@@ -157,7 +158,7 @@ describe GTop do
         ss_pointer = FFI::AutoPointer.new ss_pointer, described_class::GLib.method(:g_free)
         s[:number].times do |i|
           ssi = described_class::MemoryMapEntry.new(ss_pointer + (i * described_class::MemoryMapEntry.size))
-          # p Hash[ ssi.members.map { |m| [ m, ssi[m].is_a?(FFI::StructLayout::CharArray) ? ssi[m].to_s.force_encoding('UTF-8') : ssi[m] ] } ]
+          # p Hash[ ssi.members.map { |m| [ m, ssi[m].is_a?(FFI::StructLayout::CharArray) ? ssi[m].to_s.force_encoding(Encoding.default_external) : ssi[m] ] } ]
         end
       }.to_not raise_exception
     end
@@ -180,15 +181,15 @@ describe GTop do
           #       case ssi[:type]
           #       when described_class::FILE_TYPE_FILE
           #         sss = ssi[:info][:file]
-          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding('UTF-8') : sss[m] ] } ]
+          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding(Encoding.default_external) : sss[m] ] } ]
           #       when described_class::FILE_TYPE_PIPE
           #         'pipe'
           #       when described_class::FILE_TYPE_INETSOCKET, described_class::FILE_TYPE_INET6SOCKET
           #         sss = ssi[:info][:sock]
-          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding('UTF-8') : sss[m] ] } ]
+          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding(Encoding.default_external) : sss[m] ] } ]
           #       when described_class::FILE_TYPE_LOCALSOCKET
           #         sss = ssi[:info][:localsock]
-          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding('UTF-8') : sss[m] ] } ]
+          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding(Encoding.default_external) : sss[m] ] } ]
           #       else
           #         nil
           #       end
@@ -207,7 +208,7 @@ describe GTop do
         s = described_class::NetworkDevicesList.new
         ptr = described_class.network_devices_list(s)
         ap = FFI::AutoPointer.new ptr, described_class::GLib.method(:g_strfreev)
-        ap.get_array_of_string(0).map{ |v| v.force_encoding('UTF-8') }
+        ap.get_array_of_string(0).map{ |v| v.force_encoding(Encoding.default_external) }
       }.to_not raise_exception
     end
   end
@@ -229,7 +230,7 @@ describe GTop do
         ss_pointer = FFI::AutoPointer.new ss_pointer, described_class::GLib.method(:g_free)
         s[:number].times do |i|
           ssi = described_class::MountEntry.new(ss_pointer + (i * described_class::MountEntry.size))
-          # p Hash[ ssi.members.map { |m| [ m, ssi[m].is_a?(FFI::StructLayout::CharArray) ? ssi[m].to_s.force_encoding('UTF-8') : ssi[m] ] } ]
+          # p Hash[ ssi.members.map { |m| [ m, ssi[m].is_a?(FFI::StructLayout::CharArray) ? ssi[m].to_s.force_encoding(Encoding.default_external) : ssi[m] ] } ]
         end
       }.to_not raise_exception
     end
@@ -265,19 +266,39 @@ describe GTop do
     end
   end
 
-  describe '.process_working_directory' do
+  describe '.process_working_directories' do
     it 'works' do
       expect {
         s = described_class::ProcessWorkingDirectory.new
-        addr = described_class.process_working_directory(s, Process.pid)
+        addr = described_class.process_working_directories(s, Process.pid)
         ptr = FFI::Pointer.new(:pointer, addr)
         ap = FFI::AutoPointer.new ptr, described_class::GLib.method(:g_strfreev)
         if ap.null?
           nil
         else
-          ap.get_array_of_string(0).map{ |v| v.force_encoding('UTF-8') }
+          ap.get_array_of_string(0).map{ |v| v.force_encoding(Encoding.default_external) }
         end
-        Hash[ s.members.map { |m| [ m, [:root, :exe].include?(m) ? s[m].to_s : s[m] ] } ]
+        Hash[ s.members.map { |m| [ m, [:root, :exe].include?(m) ? s[m].to_s.force_encoding(Encoding.default_external) : s[m] ] } ]
+      }.to_not raise_exception
+    end
+  end
+
+  describe '.semaphores_limits' do
+    it 'works' do
+      expect {
+        s = described_class::SemaphoresLimits.new
+        described_class.semaphores_limits(s)
+        Hash[ s.members.map { |m| [ m, s[m] ] } ]
+      }.to_not raise_exception
+    end
+  end
+
+  describe '.messages_limits' do
+    it 'works' do
+      expect {
+        s = described_class::MessagesLimits.new
+        described_class.messages_limits(s)
+        p Hash[ s.members.map { |m| [ m, s[m] ] } ]
       }.to_not raise_exception
     end
   end
