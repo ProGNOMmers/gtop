@@ -310,10 +310,21 @@ describe GTop do
         s = described_class::SystemInfo.new(addr)
         p Hash[ s.members.map do |m|
           [ m, 
-            if m == :cpuinfo
+            case m 
+            when :cpuinfo
               s[:ncpu].times.map do |i| 
                 ss = s[m][i]
-                Hash[ ss.members.map { |mm| [ mm, ss[mm] ] } ]
+                # TODO get informations by ss[:labels] and ss[:values] (see sysinfo.h)
+                Hash[ ss.members.map do |mm|
+                  [ mm, 
+                    case mm
+                    when :labels
+                      ss[mm]
+                    else
+                      ss[mm]
+                    end
+                  ]
+                end ]
               end
             else
               s[m]

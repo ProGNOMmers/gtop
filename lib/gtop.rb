@@ -12,14 +12,13 @@ module GTop
 
   ffi_lib 'libgtop-2.0'
 
-  require 'gtop/glib/types'
+  require 'gtop/glib'
   include GLib::Types
 
   typedef :ulong,   :pid_t_ptr
   typedef :pointer, :guint16_ptr
 
   require 'gtop/constants'
-  require 'gtop/glib'
   require 'gtop/system_dependencies'
   # require 'gtop/glibtop'
   require 'gtop/cpu'
@@ -54,6 +53,7 @@ module GTop
   require 'gtop/process_working_directory'
   require 'gtop/semaphores_limits'
   require 'gtop/messages_limits'
+  require 'gtop/glib/g_ptr_array'
   require 'gtop/entry'
   require 'gtop/system_info'
 

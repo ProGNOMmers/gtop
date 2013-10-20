@@ -6,6 +6,7 @@ module GTop
       def self.included(receiver)
         receiver.instance_eval do
           typedef :int,     :gint
+          typedef :uint,    :guint
           typedef :int64,   :gint64
           typedef :uint8,   :guint8
           typedef :uint16,  :guint16
@@ -13,6 +14,7 @@ module GTop
           typedef :uint64,  :guint64
           typedef :pointer, :gpointer
           typedef :gint,    :gboolean
+          # typedef :char,    :gchar
           typedef :pointer, :GPtrArray
           typedef :pointer, :GHashTable
         end
