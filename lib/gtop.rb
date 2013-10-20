@@ -52,7 +52,7 @@ module GTop
   require 'gtop/file_system_usage'
   require 'gtop/process_affinity'
   require 'gtop/process_working_directory'
-  require 'gtop/sempahores_limits'
+  require 'gtop/semaphores_limits'
   require 'gtop/messages_limits'
 
   # attach_function :init_global_server,   :glibtop_init,                [],                           :pointer

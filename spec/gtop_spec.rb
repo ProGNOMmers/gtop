@@ -298,7 +298,7 @@ describe GTop do
       expect {
         s = described_class::MessagesLimits.new
         described_class.messages_limits(s)
-        p Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        Hash[ s.members.map { |m| [ m, s[m] ] } ]
       }.to_not raise_exception
     end
   end
