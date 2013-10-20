@@ -13,6 +13,8 @@ module GTop
           typedef :uint64,  :guint64
           typedef :pointer, :gpointer
           typedef :gint,    :gboolean
+          typedef :pointer, :GPtrArray
+          typedef :pointer, :GHashTable
         end
       end
     end

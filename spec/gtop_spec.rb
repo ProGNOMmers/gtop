@@ -302,4 +302,25 @@ describe GTop do
       }.to_not raise_exception
     end
   end
+
+  describe '.system_info', focus: true do
+    it 'works' do
+      expect {
+        addr = described_class.system_info
+        s = described_class::SystemInfo.new(addr)
+        p Hash[ s.members.map do |m|
+          [ m, 
+            if m == :cpuinfo
+              s[:ncpu].times.map do |i| 
+                ss = s[m][i]
+                Hash[ ss.members.map { |mm| [ mm, ss[mm] ] } ]
+              end
+            else
+              s[m]
+            end
+          ]
+        end ]
+      }.to_not raise_exception
+    end
+  end
 end

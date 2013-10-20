@@ -54,6 +54,8 @@ module GTop
   require 'gtop/process_working_directory'
   require 'gtop/semaphores_limits'
   require 'gtop/messages_limits'
+  require 'gtop/entry'
+  require 'gtop/system_info'
 
   # attach_function :init_global_server,   :glibtop_init,                [],                           :pointer
   # attach_function :close_global_server,  :glibtop_close,               [],                           :void
@@ -85,7 +87,9 @@ module GTop
   attach_function :semaphores_limits,           :glibtop_get_sem_limits,      [:pointer],                   :void
   attach_function :messages_limits,             :glibtop_get_msg_limits,      [:pointer],                   :void
 
-  # glibtop_get_sysinfo
+  attach_function :system_info,                 :glibtop_get_sysinfo,         [],                           :pointer
+
+  # glibtop_sysinfo *glibtop_get_sysinfo (void);
   # attach_function :get_parameter,       :glibtop_get_parameter,    [:uint, :pointer, :size_t],   :size_t
   # attach_function :set_parameter,       :glibtop_set_parameter,    [:uint, :pointer, :size_t],   :void
 end
