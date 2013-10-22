@@ -15,7 +15,7 @@ module GTop
           typedef :pointer, :gpointer
           typedef :gint,    :gboolean
           # typedef :char,    :gchar
-          typedef :pointer, :GPtrArray
+          # typedef :pointer, :GPtrArray
           typedef :pointer, :GHashTable
         end
       end

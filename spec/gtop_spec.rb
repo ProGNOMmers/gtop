@@ -308,28 +308,37 @@ describe GTop do
       expect {
         addr = described_class.system_info
         s = described_class::SystemInfo.new(addr)
-        p Hash[ s.members.map do |m|
+        pp Hash[ s.members.map do |m|
           [ m, 
             case m 
             when :cpuinfo
-              s[:ncpu].times.map do |i| 
+              s[:ncpu].times.map do |i|
                 ss = s[m][i]
-                # TODO get informations by ss[:labels] and ss[:values] (see sysinfo.h)
+                # TODO retrieve informations from ss[:labels] and ss[:values] (see sysinfo.h)
                 Hash[ ss.members.map do |mm|
                   [ mm, 
                     case mm
                     when :labels
-                      ss[mm]
+                      sss = ss[mm]
+                      # sss[:pdata] : array_of_strings
+                      Hash[ sss.members.map do |mmm|
+                        [ mmm, 
+                          case mmm
+                          when :pdata
+                            #sss[mmm]
+                            sss[mmm].get_array_of_string(0).map{ |v| v.force_encoding(Encoding.default_external) }
+                          else
+                            sss[mmm]
+                          end ]
+                      end ]
                     else
                       ss[mm]
-                    end
-                  ]
+                    end ]
                 end ]
               end
             else
               s[m]
-            end
-          ]
+            end ]
         end ]
       }.to_not raise_exception
     end
