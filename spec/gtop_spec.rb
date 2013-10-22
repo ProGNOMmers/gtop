@@ -313,24 +313,26 @@ describe GTop do
             case m 
             when :cpuinfo
               s[:ncpu].times.map do |i|
+                puts "ncpu: #{i}"
                 ss = s[m][i]
                 # TODO retrieve informations from ss[:labels] and ss[:values] (see sysinfo.h)
                 Hash[ ss.members.map do |mm|
+                  puts "mm: #{mm}"
                   [ mm, 
                     case mm
                     when :labels
-                      sss = ss[mm]
-                      # sss[:pdata] : array_of_strings
-                      Hash[ sss.members.map do |mmm|
-                        [ mmm, 
-                          case mmm
-                          when :pdata
-                            #sss[mmm]
-                            sss[mmm].get_array_of_string(0).map{ |v| v.force_encoding(Encoding.default_external) }
-                          else
-                            sss[mmm]
-                          end ]
-                      end ]
+                      # ss[mm][:pdata] : array_of_strings
+                      ary, ptr = ss[mm], nil
+                      p ary
+                      described_class::GLib.g_ptr_array_foreach ary, described_class::GLib::GPtrArrayForeachCallback, ptr
+                      # Hash[ sss.members.map do |mmm|
+                      #   [ mmm, 
+                      #     case mmm
+                      #     when :pdata
+                      #     else
+                      #       sss[mmm]
+                      #     end ]
+                      # end ]
                     else
                       ss[mm]
                     end ]
