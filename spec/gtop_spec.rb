@@ -310,7 +310,7 @@ describe GTop do
 
   describe '.system_info' do
     it 'works' do
-      # pending 'It crashes with a segmentation fault at described_class::GLib.g_ptr_array_foreach line; dunno why, it should work'
+      pending 'It crashes with a segmentation fault at described_class::GLib.g_ptr_array_foreach line; dunno why, it should work'
       expect {
         addr = described_class.system_info
         s = described_class::SystemInfo.new(addr)
@@ -331,7 +331,7 @@ describe GTop do
                       # ss[mm][:pdata] : array_of_strings
                       ary, ptr = ss[mm], nil
                       # Chrashes with a segmentation fault here
-                      described_class::GLib.g_ptr_array_foreach ary, described_class::GLib::GPtrArrayForeachCallback, ptr
+                      # described_class::GLib.g_ptr_array_foreach ary, described_class::GLib::GPtrArrayForeachCallback, ptr
                       # Hash[ sss.members.map do |mmm|
                       #   [ mmm, 
                       #     case mmm
