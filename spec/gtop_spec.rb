@@ -330,7 +330,7 @@ describe GTop do
                     when :labels
                       # ss[mm][:pdata] : array_of_strings
                       ary, ptr = ss[mm], nil
-                      # Chrashes with a segmentation fault here
+                      # Crashes with a segmentation fault here
                       # described_class::GLib.g_ptr_array_foreach ary, described_class::GLib::GPtrArrayForeachCallback, ptr
                       # Hash[ sss.members.map do |mmm|
                       #   [ mmm, 
