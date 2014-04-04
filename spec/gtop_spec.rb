@@ -153,12 +153,14 @@ describe GTop do
         s = described_class::ProcessMemoryMaps.new
         addr = described_class.process_memory_maps(s, Process.pid)
 
-        # p Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        # p\
+        Hash[ s.members.map { |m| [ m, s[m] ] } ]
         ss_pointer = FFI::Pointer.new(described_class::MemoryMapEntry, addr)
         ss_pointer = FFI::AutoPointer.new ss_pointer, described_class::GLib.method(:g_free)
         s[:number].times do |i|
           ssi = described_class::MemoryMapEntry.new(ss_pointer + (i * described_class::MemoryMapEntry.size))
-          # p Hash[ ssi.members.map { |m| [ m, ssi[m].is_a?(FFI::StructLayout::CharArray) ? ssi[m].to_s.force_encoding(Encoding.default_external) : ssi[m] ] } ]
+          # p\
+          Hash[ ssi.members.map { |m| [ m, ssi[m].is_a?(FFI::StructLayout::CharArray) ? ssi[m].to_s.force_encoding(Encoding.default_external) : ssi[m] ] } ]
         end
       }.to_not raise_exception
     end
@@ -174,29 +176,30 @@ describe GTop do
         ss_pointer = FFI::AutoPointer.new ss_pointer, described_class::GLib.method(:g_free)
         s[:number].times do |i|
           ssi = described_class::OpenFilesEntry.new(ss_pointer + (i * described_class::OpenFilesEntry.size))
-          # Hash[ ssi.members.map { |m|
-          #   [ m, 
-          #     case m
-          #     when :info
-          #       case ssi[:type]
-          #       when described_class::FILE_TYPE_FILE
-          #         sss = ssi[:info][:file]
-          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding(Encoding.default_external) : sss[m] ] } ]
-          #       when described_class::FILE_TYPE_PIPE
-          #         'pipe'
-          #       when described_class::FILE_TYPE_INETSOCKET, described_class::FILE_TYPE_INET6SOCKET
-          #         sss = ssi[:info][:sock]
-          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding(Encoding.default_external) : sss[m] ] } ]
-          #       when described_class::FILE_TYPE_LOCALSOCKET
-          #         sss = ssi[:info][:localsock]
-          #         Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding(Encoding.default_external) : sss[m] ] } ]
-          #       else
-          #         nil
-          #       end
-          #     else
-          #       ssi[m]
-          #     end ]
-          # } ]
+          # p\
+          Hash[ ssi.members.map { |m|
+            [ m, 
+              case m
+              when :info
+                case ssi[:type]
+                when described_class::FILE_TYPE_FILE
+                  sss = ssi[:info][:file]
+                  Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding(Encoding.default_external) : sss[m] ] } ]
+                when described_class::FILE_TYPE_PIPE
+                  'pipe'
+                when described_class::FILE_TYPE_INETSOCKET, described_class::FILE_TYPE_INET6SOCKET
+                  sss = ssi[:info][:sock]
+                  Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding(Encoding.default_external) : sss[m] ] } ]
+                when described_class::FILE_TYPE_LOCALSOCKET
+                  sss = ssi[:info][:localsock]
+                  Hash[ sss.members.map { |m| [ m, sss[m].is_a?(FFI::StructLayout::CharArray) ? sss[m].to_s.force_encoding(Encoding.default_external) : sss[m] ] } ]
+                else
+                  nil
+                end
+              else
+                ssi[m]
+              end ]
+          } ]
         end
       }.to_not raise_exception
     end
@@ -225,12 +228,14 @@ describe GTop do
         s = described_class::MountList.new
         addr = described_class.mount_list(s, 1)
 
-        # p Hash[ s.members.map { |m| [ m, s[m] ] } ]
+        # p\
+        Hash[ s.members.map { |m| [ m, s[m] ] } ]
         ss_pointer = FFI::Pointer.new(described_class::MountEntry, addr)
         ss_pointer = FFI::AutoPointer.new ss_pointer, described_class::GLib.method(:g_free)
         s[:number].times do |i|
           ssi = described_class::MountEntry.new(ss_pointer + (i * described_class::MountEntry.size))
-          # p Hash[ ssi.members.map { |m| [ m, ssi[m].is_a?(FFI::StructLayout::CharArray) ? ssi[m].to_s.force_encoding(Encoding.default_external) : ssi[m] ] } ]
+          # p\
+          Hash[ ssi.members.map { |m| [ m, ssi[m].is_a?(FFI::StructLayout::CharArray) ? ssi[m].to_s.force_encoding(Encoding.default_external) : ssi[m] ] } ]
         end
       }.to_not raise_exception
     end
@@ -303,12 +308,14 @@ describe GTop do
     end
   end
 
-  describe '.system_info', focus: true do
+  describe '.system_info' do
     it 'works' do
+      # pending 'It crashes with a segmentation fault at described_class::GLib.g_ptr_array_foreach line; dunno why, it should work'
       expect {
         addr = described_class.system_info
         s = described_class::SystemInfo.new(addr)
-        pp Hash[ s.members.map do |m|
+        pp\
+        Hash[ s.members.map do |m|
           [ m, 
             case m 
             when :cpuinfo
@@ -323,7 +330,7 @@ describe GTop do
                     when :labels
                       # ss[mm][:pdata] : array_of_strings
                       ary, ptr = ss[mm], nil
-                      p ary
+                      # Chrashes with a segmentation fault here
                       described_class::GLib.g_ptr_array_foreach ary, described_class::GLib::GPtrArrayForeachCallback, ptr
                       # Hash[ sss.members.map do |mmm|
                       #   [ mmm, 
